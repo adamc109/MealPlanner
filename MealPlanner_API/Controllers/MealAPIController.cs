@@ -9,11 +9,19 @@ namespace MealPlanner_API.Controllers
     [ApiController]
     public class MealAPIController : ControllerBase
     {
+        private readonly ILogger<MealAPIController> _logger;
+
+        public MealAPIController(ILogger<MealAPIController> logger)
+        {
+            _logger =logger;
+        }
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         //returns all meals
         public ActionResult<IEnumerable<MealDTO>> GetMeals()
         {
+            _logger.LogInformation("Getting all meals");
             return Ok(MealStore.mealList);
         }
 
@@ -26,6 +34,7 @@ namespace MealPlanner_API.Controllers
         {
             if (id == 0)
             {
+                _logger.LogError("Get Meal Error with Id`" + id);
                 return BadRequest();
             };
 

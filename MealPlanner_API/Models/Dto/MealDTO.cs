@@ -4,6 +4,7 @@ namespace MealPlanner_API.Models.Dto
 {
     public class MealDTO
     {
+        [Key]
 
         public int Id { get; set; }
         [Required]
@@ -11,6 +12,7 @@ namespace MealPlanner_API.Models.Dto
         public string Name { get; set; }
         public string URL { get; set; }
         public string Image { get; set; }
+        [Range(0, 10)]
         public int HealthRating { get; set; }
     }
 }
