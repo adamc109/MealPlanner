@@ -9,20 +9,21 @@ namespace MealPlanner_API.Controllers
     [ApiController]
     public class MealAPIController : ControllerBase
     {
-        private readonly ILogger<MealAPIController> _logger;
 
-        public MealAPIController(ILogger<MealAPIController> logger)
+        private readonly ApplicationDbContext _db;
+        public MealAPIController(ApplicationDbContext db)
         {
-            _logger =logger;
+            _db = db;
         }
+
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         //returns all meals
         public ActionResult<IEnumerable<MealDTO>> GetMeals()
         {
-            _logger.LogInformation("Getting all meals");
-            return Ok(MealStore.mealList);
+            
+            return Ok(_db.Meals.ToList());
         }
 
         //returns one meal based on Id
@@ -34,11 +35,11 @@ namespace MealPlanner_API.Controllers
         {
             if (id == 0)
             {
-                _logger.LogError("Get Meal Error with Id`" + id);
+                
                 return BadRequest();
             };
 
-            var meal = MealStore.mealList.FirstOrDefault(u => u.Id == id);
+            var meal = _db.Meals.FirstOrDefault(u => u.Id == id);
             //checks if meal is not found
             if (meal == null)
             {
@@ -56,7 +57,7 @@ namespace MealPlanner_API.Controllers
         public ActionResult<MealDTO> CreateMeal([FromBody]MealDTO mealDTO) 
         {
             //returns name if it already exists, if Name does not exist returns null
-            if (MealStore.mealList.FirstOrDefault(u => u.Name.ToLower() == mealDTO.Name.ToLower()) != null)
+            if (_db.Meals.FirstOrDefault(u => u.Name.ToLower() == mealDTO.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Meal Already Exists");
                 return BadRequest(ModelState);
@@ -71,9 +72,17 @@ namespace MealPlanner_API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError); 
             }
 
+            //converts mealDTO to meal
+            Meal model = new()
+            {
+                Id = mealDTO.Id,
+                Name = mealDTO.Name,
+                URL = mealDTO.URL,
+                Image = mealDTO.Image
+            };
             //creates new ID by +1 to highest existing ID
-            mealDTO.Id = MealStore.mealList.OrderByDescending(u=>u.Id).FirstOrDefault().Id +1;
-            MealStore.mealList.Add(mealDTO);
+            _db.Meals.Add(model);           
+            _db.SaveChanges();
 
 
             return CreatedAtRoute("GetMeal", new { id = mealDTO.Id }, mealDTO);
@@ -94,13 +103,13 @@ namespace MealPlanner_API.Controllers
             {
                 return BadRequest();
             }
-            var meal = MealStore.mealList.FirstOrDefault(u => u.Id == id);
+            var meal = _db.Meals.FirstOrDefault(u => u.Id == id);
             if (meal == null)
             {
                 return NotFound();
             }
-            MealStore.mealList.Remove(meal);
-
+            _db.Meals.Remove(meal);
+            _db.SaveChanges();
             return NoContent();
            
         }
@@ -116,12 +125,22 @@ namespace MealPlanner_API.Controllers
             }
 
             //retrive meal based on Id
-            var meal = MealStore.mealList.FirstOrDefault(u => u.Id == id);
-            meal.Name = mealDTO.Name;
-            meal.Image = mealDTO.Image;
-            meal.URL = mealDTO.URL;
-            meal.HealthRating = mealDTO.HealthRating;
+            //var meal = MealStore.mealList.FirstOrDefault(u => u.Id == id);
+            //meal.Name = mealDTO.Name;
+            //meal.Image = mealDTO.Image;
+            //meal.URL = mealDTO.URL;
+            //meal.HealthRating = mealDTO.HealthRating;
 
+            Meal model = new()
+            {
+                Id = mealDTO.Id,
+                Name = mealDTO.Name,
+                URL = mealDTO.URL,
+                Image = mealDTO.Image
+            };
+
+            _db.Meals.Update(model);
+            _db.SaveChanges();
             return NoContent();
 
         }
