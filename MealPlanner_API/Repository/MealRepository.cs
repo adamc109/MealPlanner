@@ -15,13 +15,13 @@ namespace MealPlanner_API.Repository
         {
             _db = db;
         }
-        public async Task Create(Meal entity)
+        public async Task CreateAsync(Meal entity)
         {
             await _db.Meals.AddAsync(entity);
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task<Meal> Get(Expression<Func<Meal, bool>> filter = null, bool tracked = true)
+        public async Task<Meal> GetAsync(Expression<Func<Meal, bool>> filter = null, bool tracked = true)
         {
             IQueryable<Meal> query = _db.Meals;
 
@@ -38,7 +38,7 @@ namespace MealPlanner_API.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<List<Meal>> GetAll(Expression<Func<Meal, bool>> filter = null)
+        public async Task<List<Meal>> GetAllAsync(Expression<Func<Meal, bool>> filter = null)
         {
             //IQueryable out of memory DB (not all records returned)
             IQueryable<Meal> query = _db.Meals;
@@ -52,17 +52,21 @@ namespace MealPlanner_API.Repository
             
         }
 
-        public async Task Remove(Meal entity)
+        public async Task RemoveAsync(Meal entity)
         {
             _db.Meals.Remove(entity);
-            await Save();
+            await SaveAsync();
         }
 
-        public async Task Save()
+        public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
         }
 
-
+        public async Task UpdateAsync(Meal entity)
+        {
+            _db.Meals.Update(entity);
+            await SaveAsync();
+        }
     }
 }

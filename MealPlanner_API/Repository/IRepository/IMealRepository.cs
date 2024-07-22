@@ -5,11 +5,12 @@ namespace MealPlanner_API.Repository.IRepository
 {
     public interface IMealRepository
     {
-        Task<List<Meal>> GetAll(Expression<Func<Meal,bool>> filter = null);
-        Task<Meal> Get(Expression<Func<Meal, bool>> filter = null, bool tracked=true);
+        Task<List<Meal>> GetAllAsync(Expression<Func<Meal,bool>> filter = null);
+        Task<Meal> GetAsync(Expression<Func<Meal, bool>> filter = null, bool tracked=true);
 
-        Task Create(Meal entity);
-        Task Remove(Meal entity);
-        Task Save();
+        Task CreateAsync(Meal entity);
+        Task UpdateAsync(Meal entity);
+        Task RemoveAsync(Meal entity);
+        Task SaveAsync();
     }
 }

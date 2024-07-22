@@ -2,6 +2,7 @@
 using MealPlanner_API.Data;
 using MealPlanner_API.Models;
 using MealPlanner_API.Models.Dto;
+using MealPlanner_API.Repository.IRepository;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,13 @@ namespace MealPlanner_API.Controllers
     public class MealAPIController : ControllerBase
     {
 
-        private readonly ApplicationDbContext _db;
+        
+        private readonly IMealRepository _dbMeal;
         private readonly IMapper _mapper;
-        public MealAPIController(ApplicationDbContext db, IMapper mapper)
+
+        public MealAPIController(IMealRepository dbMeal, IMapper mapper)
         {
-            _db = db;
+            _dbMeal = dbMeal;
             _mapper = mapper;
         }
 
@@ -27,7 +30,7 @@ namespace MealPlanner_API.Controllers
         //returns all meals
         public async Task<ActionResult<IEnumerable<MealDTO>>> GetMeals()
         {
-            IEnumerable<Meal> mealList = await _db.Meals.ToListAsync();
+            IEnumerable<Meal> mealList = await _dbMeal.GetAllAsync();
             return Ok(_mapper.Map<List<MealDTO>>(mealList));
         }
 
@@ -36,7 +39,7 @@ namespace MealPlanner_API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<MealDTO>> GetMeal(int id)
+        public async Task<ActionResult<MealDTO>> GetMealAsync(int id)
         {
             if (id == 0)
             {
@@ -44,7 +47,7 @@ namespace MealPlanner_API.Controllers
                 return BadRequest();
             };
 
-            var meal = await _db.Meals.FirstOrDefaultAsync(u => u.Id == id);
+            var meal = await _dbMeal.GetAsync(u => u.Id == id);
             //checks if meal is not found
             if (meal == null)
             {
@@ -62,7 +65,7 @@ namespace MealPlanner_API.Controllers
         public async Task<ActionResult<MealDTO>> CreateMeal([FromBody]MealCreateDTO createDTO) 
         {
             //returns name if it already exists, if Name does not exist returns null
-            if (await _db.Meals.FirstOrDefaultAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
+            if (await _dbMeal.GetAsync(u => u.Name.ToLower() == createDTO.Name.ToLower()) != null)
             {
                 ModelState.AddModelError("CustomError", "Meal Already Exists");
                 return BadRequest(ModelState);
@@ -78,8 +81,7 @@ namespace MealPlanner_API.Controllers
             Meal model = _mapper.Map<Meal>(createDTO);
 
             //creates new ID by +1 to highest existing ID
-            await _db.Meals.AddAsync(model);           
-            await _db.SaveChangesAsync();
+            await _dbMeal.CreateAsync(model);
 
 
             return CreatedAtRoute("GetMeal", new { id = model.Id }, model);
@@ -100,13 +102,12 @@ namespace MealPlanner_API.Controllers
             {
                 return BadRequest();
             }
-            var meal = await _db.Meals.FirstOrDefaultAsync(u => u.Id == id);
+            var meal = await _dbMeal.GetAsync(u => u.Id == id);
             if (meal == null)
             {
                 return NotFound();
             }
-            _db.Meals.Remove(meal);
-            await _db.SaveChangesAsync();
+            await _dbMeal.RemoveAsync(meal);
             return NoContent();
            
         }
@@ -131,8 +132,8 @@ namespace MealPlanner_API.Controllers
             Meal model = _mapper.Map<Meal>(updateDTO);
 
 
-            _db.Meals.Update(model);
-            await _db.SaveChangesAsync();
+            await _dbMeal.UpdateAsync(model);
+            
             return NoContent();
 
         }
