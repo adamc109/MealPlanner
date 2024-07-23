@@ -3,14 +3,12 @@ using System.Linq.Expressions;
 
 namespace MealPlanner_API.Repository.IRepository
 {
-    public interface IMealRepository
+    public interface IMealRepository : IRepository<Meal>
     {
-        Task<List<Meal>> GetAllAsync(Expression<Func<Meal,bool>> filter = null);
-        Task<Meal> GetAsync(Expression<Func<Meal, bool>> filter = null, bool tracked=true);
+   
 
-        Task CreateAsync(Meal entity);
-        Task UpdateAsync(Meal entity);
-        Task RemoveAsync(Meal entity);
-        Task SaveAsync();
+    
+        Task<Meal> UpdateAsync(Meal entity);
+ 
     }
 }
