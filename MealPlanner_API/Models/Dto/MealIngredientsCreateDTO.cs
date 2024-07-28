@@ -2,7 +2,7 @@
 
 namespace MealPlanner_API.Models.Dto
 {
-    public class MealDTO
+    public class MealIngredientsCreateDTO
     {
         [Key]
 

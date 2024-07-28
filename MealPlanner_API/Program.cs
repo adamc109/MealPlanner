@@ -13,6 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 });
 
 builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IMealIngredientsRepository, MealIngredientsRepository>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 builder.Services.AddControllers();

@@ -11,6 +11,7 @@ namespace MealPlanner_API.Data
             
         }
         public DbSet<Meal> Meals { get; set; }
+        public DbSet<MealIngredients> MealIngredients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
