@@ -100,7 +100,7 @@ namespace MealPlanner_API.Controllers
             try
             {
                 //returns name if it already exists, if Name does not exist returns null.
-                if (await _dbMealIngri.GetAsync(u => u.Ingredient.ToLower() == createDTO.Name.ToLower()) != null)
+                if (await _dbMealIngri.GetAsync(u => u.Ingredient.ToLower() == createDTO.Ingredient.ToLower()) != null)
                 {
                     ModelState.AddModelError("CustomError", "Meal Already Exists");
                     return BadRequest(ModelState);
@@ -134,10 +134,10 @@ namespace MealPlanner_API.Controllers
 
         //delete meal
 
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id:int}", Name = "DeleteMeal")]
+        [HttpDelete("{id:int}", Name = "DeleteMealIngridient")]
         public async Task<ActionResult<APIResponse>> DeleteMealIngridient(int id)
         {
             try
@@ -165,7 +165,9 @@ namespace MealPlanner_API.Controllers
             return _response;
         }
 
-        [HttpPut("{id:int}", Name = "UpdateMeal")]
+        [HttpPut("{id:int}", Name = "UpdateMealIngredient")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> UpdateMealIngredient(int id, [FromBody] MealIngredientsUpdateDTO updateDTO)
         {
             try

@@ -16,6 +16,11 @@ namespace MealPlanner_API
             CreateMap<Meal, MealCreateDTO>().ReverseMap();
             CreateMap<Meal, MealUpdateDTO>().ReverseMap();
 
+            CreateMap<MealIngredients, MealIngredientsDTO>();
+            CreateMap<MealIngredientsDTO, MealIngredients>();
+
+            CreateMap<MealIngredients, MealIngredientsCreateDTO>().ReverseMap();
+            CreateMap<MealIngredients, MealIngredientsUpdateDTO>().ReverseMap();
         }
     }
 }

@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MealPlanner_API.Models.Dto
 {
     public class MealIngredientsCreateDTO
     {
         [Key]
-
+        //automatically creates  Id value when inserting new meal
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
-        public string URL { get; set; }
-        public string Image { get; set; }
-        [Range(0, 10)]
-        public int HealthRating { get; set; }
+        public string Ingredient { get; set; }
+
+        public int Quanitiy { get; set; }
+        public string Unit { get; set; }
     }
 }
 
