@@ -9,6 +9,14 @@ namespace MealPlanner_API.Models
         //automatically creates  Id value when inserting new meal
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        
+        //FK Mapper
+        [ForeignKey("Meal")]
+
+        public int MealID { get; set; }
+
+        public Meal Meal { get; set; }
+
         public string Ingredient {  get; set; }
 
         public int Quanitiy { get; set; }
