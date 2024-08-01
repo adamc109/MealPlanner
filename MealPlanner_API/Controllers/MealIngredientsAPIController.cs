@@ -17,6 +17,7 @@ namespace MealPlanner_API.Controllers
 
 
         private readonly IMealIngredientsRepository _dbMealIngri;
+        private readonly IMealRepository _dbMeal;
         private readonly IMapper _mapper;
         protected APIResponse _response;
 
@@ -106,6 +107,13 @@ namespace MealPlanner_API.Controllers
                     return BadRequest(ModelState);
                 }
 
+                if(await _dbMeal.GetAsync(u=>u.Id==createDTO.MealID) == null)
+                {
+                    ModelState.AddModelError("CustomError", "Meal ID is Invalid");
+                    return BadRequest(ModelState);
+                }
+            
+
                 if (createDTO == null)
                 {
                     return BadRequest(createDTO);
@@ -178,7 +186,11 @@ namespace MealPlanner_API.Controllers
                 {
                     return BadRequest();
                 }
-
+                if (await _dbMeal.GetAsync(u => u.Id == updateDTO.MealID) == null)
+                {
+                    ModelState.AddModelError("CustomError", "Meal ID is Invalid");
+                    return BadRequest(ModelState);
+                }
 
                 MealIngredients model = _mapper.Map<MealIngredients>(updateDTO);
 

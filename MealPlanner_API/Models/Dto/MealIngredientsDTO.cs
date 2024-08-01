@@ -6,6 +6,8 @@ namespace MealPlanner_API.Models.Dto
     {
         public int Id { get; set; }
         public string Ingredient { get; set; }
+        [Required]
+        public int MealID { get; set; }
 
         public int Quanitiy { get; set; }
         public string Unit { get; set; }
