@@ -18,7 +18,7 @@ namespace MealPlanner_Web.Services
             this.httpClient = httpClient;
         }
 
-        public Task<T> SendAsync<T>(APIRequest aPIRequest)
+        public async Task<T> SendAsync<T>(APIRequest aPIRequest)
         {
             try
             {
@@ -36,8 +36,30 @@ namespace MealPlanner_Web.Services
                     case SD.ApiType.POST:
                         message.Method = HttpMethod.Post;
                         break;
+                    case SD.ApiType.PUT:
+                        message.Method = HttpMethod.Put;
+                        break;
+                    case SD.ApiType.DELETE:
+                        message.Method = HttpMethod.Delete;
+                        break;
+                    default:
+                        message.Method = HttpMethod.Get;
+                        break;
                 }
 
+                HttpResponseMessage apiResponse = null;
+
+                apiResponse = await client.SendAsync(message);  
+
+                var apiContent = await apiResponse.Content.ReadAsStringAsync();
+                var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
+                return APIResponse;
+            
+
+            }
+            catch(Exception e)
+            {
+            
             }
         }
     }
