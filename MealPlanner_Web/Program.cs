@@ -1,10 +1,16 @@
 using MealPlanner_Web;
+using MealPlanner_Web.Services;
+using MealPlanner_Web.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+builder.Services.AddHttpClient<IMealService, MealService>();
+builder.Services.AddScoped<IMealService, MealService>();
+
 
 var app = builder.Build();
 

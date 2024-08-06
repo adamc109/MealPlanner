@@ -49,17 +49,25 @@ namespace MealPlanner_Web.Services
 
                 HttpResponseMessage apiResponse = null;
 
-                apiResponse = await client.SendAsync(message);  
+                apiResponse = await client.SendAsync(message);
 
                 var apiContent = await apiResponse.Content.ReadAsStringAsync();
                 var APIResponse = JsonConvert.DeserializeObject<T>(apiContent);
                 return APIResponse;
-            
+
 
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-            
+                var dto = new APIResponse
+                {
+                    ErrorMessages = new List<string> { Convert.ToString(e.Message) },
+                    IsSuccess = false
+                };
+
+                var res = JsonConvert.SerializeObject(dto);
+                var APIResponse = JsonConvert.DeserializeObject<T>(res);
+                return APIResponse;
             }
         }
     }
