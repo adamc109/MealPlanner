@@ -1,0 +1,46 @@
+﻿@model IEnumerable<MealPlanner_Web.Models.Dto.MealDTO>
+<br />
+<div class="container p-4 border">
+    <div class="row pb-2">
+        <div class="col">
+            <h1 class="text-primary">Meal List</h1>
+        </div>
+        <div class=" col text-end pt-1">
+            <a asp-controller="Meal" asp-action="CreateMeal" class="btn btn-outline-primary">Add New Meal</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Link
+                </th>
+                <th>
+                    Image
+                </th>
+                <th>
+                    Health Rating
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.URL</td>
+                    <td>@item.Image</td>
+                    <td>@item.HealthRating</td>
+                    <td>
+                        <a asp-controller="Meal" asp-action="UpdateMeal" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Meal" asp-action="DeleteMeal" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
