@@ -29,5 +29,29 @@ namespace MealPlanner_Web.Controllers
 
             return View(list);
         }
+
+        public async Task<IActionResult> CreateMeal()
+        {
+
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateMeal(MealCreateDTO model)
+        {
+            List<MealDTO> list = new();
+
+            if (ModelState.IsValid)
+            {
+                var response = await _mealService.CreateAsync<APIResponse>(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(IndexMeal));
+                }
+            }
+            return View(model);
+        }
     }
 }
