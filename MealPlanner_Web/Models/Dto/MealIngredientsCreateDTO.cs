@@ -15,6 +15,7 @@ namespace MealPlanner_Web.Models.Dto
         public int MealID { get; set; }
 
         public int Quanitiy { get; set; }
+        
         public string Unit { get; set; }
     }
 }

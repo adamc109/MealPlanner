@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace MealPlanner_Web.Models.Dto
 {
@@ -13,6 +14,7 @@ namespace MealPlanner_Web.Models.Dto
         public string URL { get; set; }
         public string Image { get; set; }
         [Range(0, 10)]
+        [DisplayName("Health Rating")]
         public int HealthRating { get; set; }
     }
 }
