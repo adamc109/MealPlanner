@@ -4,6 +4,7 @@ using MealPlanner_Web.Models.Dto;
 using MealPlanner_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace MealPlanner_Web.Controllers
 {
@@ -46,6 +47,36 @@ namespace MealPlanner_Web.Controllers
             if (ModelState.IsValid)
             {
                 var response = await _mealService.CreateAsync<APIResponse>(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(IndexMeal));
+                }
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> UpdateMeal(int mealId)
+        {
+            
+            var response = await _mealService.GetAsync<APIResponse>(mealId);
+            if (response != null && response.IsSuccess)
+            {
+                MealDTO model = JsonConvert.DeserializeObject<MealDTO>(Convert.ToString(response.Result));
+                return View(_mapper.Map<MealUpdateDTO>(model));
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateMeal(MealUpdateDTO model)
+        {
+            
+
+            if (ModelState.IsValid)
+            {
+                var response = await _mealService.UpdateAsync<APIResponse>(model);
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexMeal));

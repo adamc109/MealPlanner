@@ -36,8 +36,8 @@
                     <td>@item.Image</td>
                     <td>@item.HealthRating</td>
                     <td>
-                        <a asp-controller="Meal" asp-action="UpdateMeal" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                        <a asp-controller="Meal" asp-action="DeleteMeal" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                        <a asp-controller="Meal" asp-action="UpdateMeal" asp-route-mealId="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                        <a asp-controller="Meal" asp-action="DeleteMeal" asp-route-mealId="@item.Id" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                     </td>
                 </tr>
             }

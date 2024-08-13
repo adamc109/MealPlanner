@@ -33,7 +33,7 @@ namespace MealPlanner_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = mealUrl + "/api/mealAPI"+id
+                Url = mealUrl + "/api/mealAPI/" +id
             });
         }
 
@@ -51,7 +51,7 @@ namespace MealPlanner_Web.Services
             return SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = mealUrl + "/api/mealAPI" + id
+                Url = mealUrl + "/api/mealAPI/" + id
             });
         }
 
@@ -61,7 +61,7 @@ namespace MealPlanner_Web.Services
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = mealUrl + "/api/mealAPI"+dto.Id
+                Url = mealUrl + "/api/mealAPI/"+dto.Id
             });
         }
     }
