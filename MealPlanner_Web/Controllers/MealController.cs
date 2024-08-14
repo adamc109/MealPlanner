@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MealPlanner_API.Models;
 using MealPlanner_Web.Models.Dto;
+using MealPlanner_Web.Services;
 using MealPlanner_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -82,6 +83,34 @@ namespace MealPlanner_Web.Controllers
                     return RedirectToAction(nameof(IndexMeal));
                 }
             }
+            return View(model);
+        }
+        public async Task<IActionResult> DeleteMeal(int mealId)
+        {
+
+            var response = await _mealService.GetAsync<APIResponse>(mealId);
+            if (response != null && response.IsSuccess)
+            {
+                MealDTO model = JsonConvert.DeserializeObject<MealDTO>(Convert.ToString(response.Result));
+                return View(model);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteMeal(MealDTO model)
+        {
+
+
+            
+                var response = await _mealService.DeleteAsync<APIResponse>(model.Id);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(IndexMeal));
+                }
+            
             return View(model);
         }
     }
