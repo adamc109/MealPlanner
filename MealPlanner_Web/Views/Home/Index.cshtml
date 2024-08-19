@@ -1,8 +1,20 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<MealPlanner_Web.Models.Dto.MealDTO>
+
+<img class="d-block w-100" src="images/home/slide1.jpg" alt="" />
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<hr />
+<div class="row" style="--bs--gutter-x:0">
+    @foreach(var meal in Model)
+    {
+     <div class="p-4 col-md-12 col-lg-6">
+         <div class="col-4">
+
+         </div>
+     </div>   
+    }
 </div>
