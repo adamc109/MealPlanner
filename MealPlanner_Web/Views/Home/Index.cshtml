@@ -1,4 +1,5 @@
-﻿@model IEnumerable<MealPlanner_Web.Models.Dto.MealDTO>
+﻿@using Microsoft.AspNetCore.Components
+@model IEnumerable<MealPlanner_Web.Models.Dto.MealDTO>
 
 <img class="d-block w-100" src="images/home/slide1.jpg" alt="" />
 
@@ -13,7 +14,18 @@
     {
      <div class="p-4 col-md-12 col-lg-6">
          <div class="col-4">
-
+             <img class="d-block w-100" style="border-radius:20px;" src="@meal.Image" alt="First slide"/>
+         </div>
+         <div class="col-8">
+             <p class="card-title text-warning" style="font-size:xx-large">@meal.Name</p>
+             <p class="card-text">
+                 @((MarkupString)meal.HealthRating.ToString())
+             </p>
+             <div class="col-12">
+                 <div class="row pb-3 pt-2">
+                     <a href="" class="btn btn-success form-control btn-block">View Details</a>
+                 </div>
+             </div>
          </div>
      </div>   
     }
